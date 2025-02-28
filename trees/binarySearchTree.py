@@ -89,6 +89,7 @@ def areIdentical(root1 , root2):
         return False
     return (root1.value == root2.value and areIdentical(root1.left , root2.left ) and areIdentical(root1.right , root2.right))
 
+
 def isSubTree(root1 , root2):
     if not root1 :
         return False

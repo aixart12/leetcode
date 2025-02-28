@@ -34,6 +34,8 @@ def checkIFArrayisSorte(arr , ind):
     return checkIFArrayisSorte(arr , ind = ind + 1)
 
 i = [1, 2, 3, 5, 5, 7, 7, 7, 8, 12, 13, 15, 15, 15, 19]
+
+
 print(checkIFArrayisSorte(i, 0))
 # Count occurrences of an element in an array.
 # def countElimentOccurrenece(arr , target , count , ind):

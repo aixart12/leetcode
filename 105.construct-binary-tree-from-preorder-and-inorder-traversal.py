@@ -13,6 +13,31 @@
 #         self.right = right
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        preIndex = [0]
+        return self.buildTreeRecur(preorder , inorder , preIndex , 0 , len(preorder) -1)
+
         
+    def buildTreeRecur(self , preorder , inorder , preIndex , left , right ):
+        # base case
+        if left > right:
+            return None
+
+        rootValue = preorder[preIndex[0]]
+        preIndex[0] += 1
+        rootIndex = self.search(inorder ,rootValue, left , right)
+
+        root = TreeNode(rootValue)
+
+        root.left = self.buildTreeRecur(preorder , inorder, preIndex , left , rootIndex -1 )
+        root.right = self.buildTreeRecur(preorder , inorder ,preIndex , rootIndex+1 , right )
+
+        return root
+
+    def search(self ,inorder , rootValue , left , right):
+        for i in range(left , right+1):
+            if inorder[i] == rootValue:
+                return i
+        return -1
+
 # @lc code=end
 

@@ -111,11 +111,23 @@ def itr_preorderTraver(root):
 # Binary tree inorder Traverse using iitration Left -> Root -> Right 
 def itr_inorderTraverse(root):
     if not root:
-        return
-    q = deque([root])
-    while q :
-        node = q.popleft()
-
+        return []
+    
+    stack = []
+    result = []
+    curr = root
+    
+    while curr or stack:
+        while curr:
+            stack.append(curr)
+            curr = curr.left
+        
+        curr = stack.pop()
+        result.append(curr.val)
+        
+        curr = curr.right
+    
+    return result
 root = TreeNode(1)
 root.left = TreeNode(2)
 root.right = TreeNode(3)
