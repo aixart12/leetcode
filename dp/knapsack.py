@@ -10,5 +10,7 @@
     # 0 / 1 ( ya to hoga , ya to nahi , or ek he har )
     # unbound knapseek ( 0/ 1 but ek ko bar bar dal sakte hai , multiple occurance )
 
-# 0 / 1 knapsack recursive 
 
+# subset sum problem 
+# 
+4
