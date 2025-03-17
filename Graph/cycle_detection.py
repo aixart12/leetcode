@@ -1,99 +1,94 @@
-# Using Depth First Search - O(v+e) time and O(v) space
+# Cycle Detection in an Undirected Graph using Depth First Search (DFS)
 
+def isCycleUtil(adj, node, visited, parent):
+    """
+    Utility function to detect cycle using DFS.
+    :param adj: Adjacency list of the graph
+    :param node: Current node being visited
+    :param visited: List to track visited nodes
+    :param parent: Parent node of the current node
+    :return: True if cycle is detected, False otherwise
+    """
+    visited[node] = True  # Mark the current node as visited
+    
+    for neighbor in adj[node]:
+        if not visited[neighbor]:  # If neighbor is not visited, recursively check
+            if isCycleUtil(adj, neighbor, visited, node):
+                return True
+        elif neighbor != parent:  # If neighbor is visited and not the parent, a cycle is found
+            return True
+    
+    return False
 
-# def isCycleUtil(adj , s , visited , parent):
-#     visited[s] = True 
-#     for i in adj[s]:
-#         if not visited[i]:
-#             if isCycleUtil(adj  ,i , visited , s):
-#                 return True
-        
-#         elif i != parent:
-#             return True
-#     return False
+def isCycleDFS(adj):
+    """
+    Function to check if a cycle exists in an undirected graph using DFS.
+    :param adj: Adjacency list of the graph
+    :return: True if cycle is detected, False otherwise
+    """
+    V = len(adj)  # Number of vertices
+    visited = [False] * V  # Initialize visited array
+    
+    for u in range(V):  # Check each component of the graph
+        if not visited[u]:
+            if isCycleUtil(adj, u, visited, -1):  # Start DFS traversal
+                return True
+    
+    return False
 
-# def isCycle(adj):
-#     V = len(adj)
-
-#     visited = [False] * V
-
-#     for u in range(V):
-#         if not visited[u]:
-#             if isCycleUtil(adj ,u , visited , -1):
-#                 return True
-            
-#     return False
-
-# if __name__ == "__main__":
-#     V = 3 
-#     adj = [[] for _ in range(V)]
-
-#     adj[1].append(0)
-#     adj[0].extend([1, 2])
-#     adj[2].extend([0, 1])
-#     adj[1].append(2)
-
-#     if isCycle(adj):
-#         print("Yes")
-#     else:
-#         print("No")
-
-
-# Breadth First Search or BFS for a Graph
-
+# Cycle Detection in an Undirected Graph using Breadth First Search (BFS)
 from collections import deque
 
-def bfs(adj , s):
-    q = deque()
-    visited = [False] *len(adj)
-
-    # Mark the source as visited and enqueue it 
-    visited[s] = True
-    q.append((s , -1))
-
-    while q:
-        curr , parent = q.popleft()
-        print(curr , end="")
-
-        for n in adj[curr]:
-            if not visited[n]:
-                visited[n] = True
-                q.append(n , curr)
-            
-            elif n != parent:
-                return True
+def bfs(adj, s, visited):
+    """
+    Utility function to detect cycle using BFS.
+    :param adj: Adjacency list of the graph
+    :param s: Source node
+    :param visited: List to track visited nodes
+    :return: True if cycle is detected, False otherwise
+    """
+    queue = deque()
+    queue.append((s, -1))  # Store the node and its parent
+    visited[s] = True  # Mark source as visited
     
-    return False
-
-def isCycle(adj):
-    n = len(adj)
-    visited = [False] * n
-
-    for i in range(n):
+    while queue:
+        node, parent = queue.popleft()
         
-        # If node is not visited,
-        # start BFS from this node.
-        if not visited[i]:
-            
-            # If cycle is found in this 
-            # component.
-            if bfs(i, adj, visited):
+        for neighbor in adj[node]:
+            if not visited[neighbor]:  # If the neighbor is not visited, mark and enqueue it
+                visited[neighbor] = True
+                queue.append((neighbor, node))
+            elif neighbor != parent:  # If the visited neighbor is not the parent, a cycle exists
                 return True
     
-    # If no cycle is found
     return False
 
+def isCycleBFS(adj):
+    """
+    Function to check if a cycle exists in an undirected graph using BFS.
+    :param adj: Adjacency list of the graph
+    :return: True if cycle is detected, False otherwise
+    """
+    V = len(adj)  # Number of vertices
+    visited = [False] * V  # Initialize visited array
+    
+    for i in range(V):  # Check each component of the graph
+        if not visited[i]:
+            if bfs(adj, i, visited):  # Start BFS traversal
+                return True
+    
+    return False
 
+# Example Usage
 if __name__ == "__main__":
+    # Example graph represented as adjacency list
     adj = [
-        [1, 2, 3],
-        [0, 2],
-        [0, 1],
-        [0, 4],
-        [3]
+        [1, 2, 3],  # Node 0 is connected to 1, 2, 3
+        [0, 2],     # Node 1 is connected to 0, 2
+        [0, 1],     # Node 2 is connected to 0, 1
+        [0, 4],     # Node 3 is connected to 0, 4
+        [3]         # Node 4 is connected to 3
     ]
-
-    if isCycle(adj):
-        print("True")
-    else:
-        print("False")
+    
+    print("Cycle Detected using DFS:", isCycleDFS(adj))  # Check using DFS
+    print("Cycle Detected using BFS:", isCycleBFS(adj))  # Check using BFS

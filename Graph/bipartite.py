@@ -1,6 +1,18 @@
+# Bipartite Graph Check 
+# A bipartite graph is a graph whose vertieces can be divided into two independent sets ,
+# such that no two adjacent vertices share the set . 
+
+# Mathematically , a graph is bipartite if and only if it does not contain an odd-length cycle 
+
+# How to Check if a Graph is Bipartite?
+# We can check if a graph is bipartite using:
+
+# BFS (Breadth-First Search) - Preferred for disconnected graphs
+# DFS (Depth-First Search) - Simpler implementation
+
 from collections import deque
 
-def isBipartite(V , adj):
+def isBipartiteBfs(V , adj):
 
     color = [-1] * V
 
@@ -24,29 +36,29 @@ def isBipartite(V , adj):
     return True
 
 
-def dfs(u , color , colors, adj):
-    #Assign the color to the current u 
-    colors[u] = color
-
-    for v in adj[u]:
-        if color[v] == -1:
-            if not dfs(v , 1 - color , colors , adj):
+def dfs(node, color, adj):
+    for neighbor in adj[node]:
+        if color[neighbor] == -1:  # If uncolored, color it opposite
+            color[neighbor] = 1 - color[node]
+            if not dfs(neighbor, color, adj):
                 return False
-        elif colors[v] == color:
+        elif color[neighbor] == color[node]:  # Conflict found
             return False
     return True
 
-def isBipartiteDfs(V , adj):
-    colors = [-1] * V
+def is_bipartite_dfs(V, adj):
+    color = [-1] * V  # -1 means uncolored
 
-    # Check each componenet of the graph
-
-    for i in range(V):
-        # If the vertex is uncolored
-        if colors[i] == -1:
-            if not dfs(i , 0 , colors , adj):
+    for start in range(V):  # Handles disconnected graphs
+        if color[start] == -1:
+            color[start] = 0  # Start coloring with 0
+            if not dfs(start, color, adj):
                 return False
-    return True
+
+    return True  # No conflicts found
+
+# Example Usage
+print("DFS Bipartite Check:", is_bipartite_dfs(V, adj))
 
 
 
@@ -69,7 +81,7 @@ if __name__ == "__main__":
     adj[3].append(0)
     adj[0].append(3)
 
-    if isBipartite(V, adj):
+    if isBipartiteBfs(V, adj):
         print("true")
     else:
         print("false")
