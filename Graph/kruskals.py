@@ -1,51 +1,51 @@
 from functools import cmp_to_key
 
 def comparator(a,b):
-    return a[2] - b[2]
+    return a[2] - b[2];
 
-def kruskals_mst(V , edges):
+def kruskals_mst(V, edges):
+
+    # Sort all edges
+    edges = sorted(edges,key=cmp_to_key(comparator))
     
-    # sort all edges 
-    edges = sorted(edges , key=cmp_to_key(comparator))
-
     # Traverse edges in sorted order
-
-    dsu = DisjointSetUnion(V)
-
+    dsu = DSU(V)
     cost = 0
     count = 0
-    for x , y , w in edges:
-        if dsu.find(x) != dsu.find(y): # the they are connected
-            dsu.union(x , y)
-            cost +=w
-            count +=1
-            if count == V -1:
+    for x, y, w in edges:
+        
+        # Make sure that there is no cycle
+        if dsu.find(x) != dsu.find(y):
+            dsu.union(x, y)
+            cost += w
+            count += 1
+            if count == V - 1:
                 break
     return cost
+    
+# Disjoint set data structure
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [1] * n
 
-class DisjointSetUnion:
-    def __init__(self , V):
-        self.rank = [0] * V
-        self.parent = list(range(V))
+    def find(self, i):
+        if self.parent[i] != i:
+            self.parent[i] = self.find(self.parent[i])
+        return self.parent[i]
 
-    def find(self , x):
-        if self.parent[x] != x : 
-            self.parent[x] = self.find(self.parent[x])
-        return self.parent[x]
+    def union(self, x, y):
+        s1 = self.find(x)
+        s2 = self.find(y)
+        if s1 != s2:
+            if self.rank[s1] < self.rank[s2]:
+                self.parent[s1] = s2
+            elif self.rank[s1] > self.rank[s2]:
+                self.parent[s2] = s1
+            else:
+                self.parent[s2] = s1
+                self.rank[s1] += 1
 
-    def union(self , x , y):
-        rootX = self.find(x)
-        rootY = self.find(y)
-
-        if rootX != rootY:
-            if self.rank[rootX] > self.rank[rootY]:
-                self.parent[rootY] = rootX
-            elif self.rank[rootX] < self.rank[rootY]:
-                self.parent[rootX] = rootY
-            else :
-
-                self.parent[rootY] = rootX
-                self.rank[rootX] += 1
 
 if __name__ == '__main__':
     
