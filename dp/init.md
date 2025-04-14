@@ -18,11 +18,15 @@ Analyse the problem is Dp:
 2. write recurive solution -> memorisation or top down(optional)
 
 Analyse - choice (inclde item1 or not in knapsack)
-W1
-/ \
- w1<=w w1>w
-/ \ |
-v x(NP) x(Not possible)
+
+```
+        W1
+        / \
+    w1<=w  w1>w
+    / \      |
+x(NP) x  (Not possible)
+```
+
 w1<=w = if okay then add the value , if not in those cases where some values were already added in w , and now the left capacity w < w1
 
 format:
