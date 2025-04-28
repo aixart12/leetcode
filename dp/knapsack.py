@@ -45,38 +45,31 @@ if __name__ == "__main__":
     print(knapSack(W, val, wt))
 
 # Using Bottom-Up DP (Tabulation) – O(n x W) Time and Space
-
-def knapsack(W , val , wt):
+def knapsack(W, val, wt):
     n = len(wt)
-    dp = [[0 for _ in range(W + 1 ) for _ in range(n+1)]]
+    dp = [[0 for _ in range(W + 1)] for _ in range(n + 1)]
 
-    # Build the table dp[][] in bottom-up manner
-    for i in range(n + 1):
+    # Build the dp table in bottom-up manner
+    for i in range(1, n + 1):
         for j in range(W + 1):
-
-            # If there is no time or the knapsack's capacity is 0 
-            if i == 0 and j == 0 :
-                dp[i][j] = 0
+            # If the item can be picked
+            if wt[i - 1] <= j:
+                pick = val[i - 1] + dp[i - 1][j - wt[i - 1]]
+                notPick = dp[i - 1][j]
+                dp[i][j] = max(pick, notPick)
             else:
-                pick = 0 
+                dp[i][j] = dp[i - 1][j]
 
-                # Pick the item if it does not exceed the capacit of knapsack 
-                if wt[i - 1] <= j:
-                    pick = val[i -1 ] +dp[i - 1][j - wt[i - 1]]
-                
-                # Don't pick the ith item 
-                notPick = dp[i - 1][j - wt[i - 1]]
-
-                dp[i - 1][j - wt[i - 1]]
-    
     return dp[n][W]
 
+# Example usage
 if __name__ == "__main__":
     val = [1, 2, 3]
     wt = [4, 5, 1]
     W = 4
-    
-    print(knapsack(W, val, wt))
+
+    print(knapsack(W, val, wt))  # Output should be 3
+
 
 # Using Bottom-Up DP (Space-Optimized) – O(n x W) Time and O(W) Space
 
