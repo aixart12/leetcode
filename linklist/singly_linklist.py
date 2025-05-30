@@ -122,8 +122,88 @@ class LinkedList :
             slow = slow.next
             fast = fast.next.next
             if slow == fast:
-                return True
-        return False
+                entry = self.head
+                while entry != slow:
+                    entry = entry.next
+                    slow = slow.next
+                return entry  # This is the start of the cycle
+        return None
+    
+    def remove_nth_node(self, n):
+        if n < 0 :
+            print('Index should be grater than 0')
+            return
+        if not self.head :
+            print('List is empty')
+            return
+        if n == 0 :
+            self.head = self.head.next
+            return
+        count = 0 
+        current = self.head
+        while current.next and count < n - 1 :
+            current = current.next
+            count += 1
+        
+        if not current:
+            print('List out if index')
+            return
+        current.next = current.next.next
+
+    
+    def IsPalindrpome(self) -> bool:
+        if not self.head and not self.head.next :
+            return True
+        
+        # Find the middle of the list
+        slow = fast = self.head 
+
+        while fast and fast.next : 
+            fast = fast.next.next
+            slow = slow.next
+
+        # reverse the second half 
+        prev = None
+        current = slow
+        while current: 
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+        
+
+        # compare both the haves
+        first  = self.head
+        second = prev
+        while second:
+            if first.data != second.data:
+                return False
+            first = first.next
+            second = second.next
+        return True
+            
+
+
+    def delete_middle(self):
+        if not self.head or not self.head.next:
+            self.head = None
+            return
+
+        slow = self.head
+        fast = self.head
+        prev = None
+
+        while fast and fast.next:
+            fast = fast.next.next
+            prev = slow
+            slow = slow.next
+
+        # Now slow is at the middle node, and prev is before it
+        prev.next = slow.next
+
+    
+    
+
     
     
 
